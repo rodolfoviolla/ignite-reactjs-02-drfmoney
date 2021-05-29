@@ -6,17 +6,17 @@ export interface Transaction {
   amount: number;
   type: string;
   category: string;
-  createdAt: string;
+  createdAt: Date;
 }
 
-const transactions: Transaction[] = [
+const transactionsSeed: Transaction[] = [
   {
     id: 1,
     title: 'Desenvolvimento de website',
     amount: 10000,
     type: 'deposit',
     category: 'Trampo',
-    createdAt: new Date().toDateString()
+    createdAt: new Date()
   },
   {
     id: 2,
@@ -24,31 +24,25 @@ const transactions: Transaction[] = [
     amount: 1700,
     type: 'withdraw',
     category: 'Casa',
-    createdAt: new Date().toDateString()
+    createdAt: new Date()
   },
 ];
 
 createServer({
   models: {
-    transactions: Model,
+    transaction: Model,
   },
 
   seeds(server) {
     server.db.loadData({
-      transactions,
+      transactions: transactionsSeed,
     });
   },
 
   routes() {
     this.namespace = 'api';
 
-    this.get('/transactions', () => this.schema.all('transactions'));
-    this.post('/transactions', (schema, request) => schema.create('transactions', JSON.parse(request.requestBody)));
-
-    this.get('/summary', () => transactions.reduce((prev, curr) => ({
-      income: curr.type === 'deposit' ? prev.income + curr.amount : prev.income,
-      outcome: curr.type === 'withdraw' ? prev.outcome + curr.amount : prev.outcome,
-      total: curr.type === 'deposit' ? prev.total + curr.amount : prev.total - curr.amount,
-    }), { income: 0, outcome: 0, total: 0 }));
+    this.get('/transactions', () => this.schema.all('transaction'));
+    this.post('/transactions', (schema, request) => schema.create('transaction', JSON.parse(request.requestBody)));
   }
 });

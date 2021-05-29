@@ -1,19 +1,11 @@
-import { useEffect, useState } from "react";
+import { useTransactions } from "../../hooks/useTransactions";
 
-import { Transaction } from "../../services/miragejs";
-
-import { dateToString, numberToCurrency } from "../../utils/format";
-
-import { api } from "../../services/api";
+import { formatDateToString, formatNumberToCurrency } from "../../utils/format";
 
 import { Container } from "./styles";
 
 export function TransactionsTable() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-
-  useEffect(() => {
-    api.get('/transactions').then(response => setTransactions(response.data.transactions));
-  }, []);
+  const { transactions } = useTransactions();
 
   return (
     <Container>
@@ -31,10 +23,10 @@ export function TransactionsTable() {
           {transactions.map(({ id, title, amount, type, category, createdAt }) => (
             <tr key={id}>
               <td>{title}</td>
-              <td className={type}>{numberToCurrency(amount)}</td>
+              <td className={type}>{formatNumberToCurrency(amount)}</td>
               <td>{category}</td>
               <td>
-                {dateToString(createdAt)}
+                {formatDateToString(createdAt)}
               </td>
             </tr>
           ))}

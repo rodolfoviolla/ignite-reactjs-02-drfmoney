@@ -1,21 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useTransactions } from '../../hooks/useTransactions';
 
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
 import totalImg from '../../assets/total.svg';
 
-import { numberToCurrency } from '../../utils/format';
-
-import { api } from '../../services/api';
+import { formatNumberToCurrency } from '../../utils/format';
 
 import { Container } from "./styles";
 
 export function Summary() {
-  const [summary, setSummary] = useState({ income: 0, outcome: 0, total: 0 });
-
-  useEffect(() => {
-    api.get('/summary').then(response => setSummary(response.data));
-  }, []);
+  const { summary } = useTransactions();
 
   return (
     <Container>
@@ -24,7 +18,7 @@ export function Summary() {
           <p>Entradas</p>
           <img src={incomeImg} alt="Entradas" />
         </header>
-        <strong>{numberToCurrency(summary.income)}</strong>
+        <strong>{formatNumberToCurrency(summary.income)}</strong>
       </div>
 
       <div>
@@ -32,7 +26,7 @@ export function Summary() {
           <p>Saídas</p>
           <img src={outcomeImg} alt="Saídas" />
         </header>
-        <strong>{numberToCurrency(summary.outcome)}</strong>
+        <strong>{formatNumberToCurrency(summary.outcome)}</strong>
       </div>
 
       <div className="highlight-background">
@@ -40,7 +34,7 @@ export function Summary() {
           <p>Total</p>
           <img src={totalImg} alt="Total" />
         </header>
-        <strong>{numberToCurrency(summary.total)}</strong>
+        <strong>{formatNumberToCurrency(summary.total)}</strong>
       </div>
     </Container>
   );

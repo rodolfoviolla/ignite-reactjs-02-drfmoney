@@ -1,11 +1,11 @@
-export function numberToCurrency(number: number) {
+export function formatNumberToCurrency(number: number) {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
   }).format(number);
 }
 
-export function dateToString(date: Date | string) {
+export function formatDateToString(date: Date | string) {
   if (typeof date === 'string') {
     date = new Date(date);
   }
